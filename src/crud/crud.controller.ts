@@ -1,10 +1,8 @@
 
-import { Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
-import { CreateClienteDto } from './create-cliente.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import { Cliente, CreateClienteDto, UpdateClienteDto } from './create-cliente.dto';
 
-class Cliente extends CreateClienteDto {
-  id: number;
-}
+
 
 @Controller('crud')
 export class CrudController {
@@ -12,14 +10,17 @@ export class CrudController {
   idGen: number = 0;
 
   @Post('add')
-  createCliente(@Body() createClienteDto: CreateClienteDto): string {
+  createCliente(@Body() createClienteDto: CreateClienteDto): Cliente | string {
     if (!createClienteDto.cel || !createClienteDto.email || !createClienteDto.nome ){
-      return 'Sem cliente no body, nada foi adicionado'
+      return 'Cliente incompleto, nada foi adicionado'
     }
 
-    this.listaCliente.push({...createClienteDto, id: this.idGen})
     this.idGen = this.idGen + 1
-    return 'Cliente com id ' + this.idGen + ' adicionado';
+
+    let clienteToBeAdded: Cliente = {...createClienteDto, id: this.idGen} 
+    this.listaCliente.push(clienteToBeAdded)
+
+    return clienteToBeAdded;
   }
 
   @Get()
@@ -27,14 +28,21 @@ export class CrudController {
     return this.listaCliente;
   }
 
-  @Delete('deleteCliente/:id')
-  deleteAll(@Param() param): Cliente {
-    let deletedClient: Cliente
-    this.listaCliente = this.listaCliente.filter((x) => {
-      x.id != param.id
-      deletedClient = x
-    })
-    return deletedClient
+  @Put(':id')
+  updateCliente(@Param() param, @Body() updateClienteDto: UpdateClienteDto): Cliente {
+    let updatedCliente: Cliente = this.listaCliente.find((x) => x.id == parseInt(param.id))
+    let pos = this.listaCliente.findIndex((x) => x == updatedCliente)
+
+    this.listaCliente[pos] = {...updatedCliente,...updateClienteDto}
+    return this.listaCliente[pos]
+  }
+
+  @Delete(':id')
+  deleteAll(@Param() param): Cliente {    
+    let deletedCliente: Cliente = this.listaCliente.find((x) => x.id == parseInt(param.id))
+    this.listaCliente = this.listaCliente.filter((x) => x.id != parseInt(param.id))
+
+    return deletedCliente
   }
 
   @Get('parimpar/:id')
