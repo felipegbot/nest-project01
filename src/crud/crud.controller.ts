@@ -1,20 +1,24 @@
 
-import { Body, Controller, Delete, Get, Header, HostParam, HttpCode, Param, Post, Query, Redirect, Req } from '@nestjs/common';
-import { get } from 'http';
+import { Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import { CreateClienteDto } from './create-cliente.dto';
 
-interface Cliente extends CreateClienteDto {
+class Cliente extends CreateClienteDto {
   id: number;
 }
 
 @Controller('crud')
 export class CrudController {
   listaCliente: Cliente[] = []
-  idGen: number = 1;
+  idGen: number = 0;
 
   @Post('add')
   createCliente(@Body() createClienteDto: CreateClienteDto): string {
+    if (!createClienteDto.cel || !createClienteDto.email || !createClienteDto.nome ){
+      return 'Sem cliente no body, nada foi adicionado'
+    }
+
     this.listaCliente.push({...createClienteDto, id: this.idGen})
+    this.idGen = this.idGen + 1
     return 'Cliente com id ' + this.idGen + ' adicionado';
   }
 
@@ -23,10 +27,14 @@ export class CrudController {
     return this.listaCliente;
   }
 
-  @Delete('deleteAll/:id')
-  deleteAll(@Param() param): string {
-    this.listaCliente = this.listaCliente.filter((x) => x != param.id)
-    return 'Todas as ocorrências de ' + param.id + ' foram deletadas'
+  @Delete('deleteCliente/:id')
+  deleteAll(@Param() param): Cliente {
+    let deletedClient: Cliente
+    this.listaCliente = this.listaCliente.filter((x) => {
+      x.id != param.id
+      deletedClient = x
+    })
+    return deletedClient
   }
 
   @Get('parimpar/:id')
