@@ -1,48 +1,33 @@
 
 import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { Cliente, CreateClienteDto, UpdateClienteDto } from './create-cliente.dto';
+import { CrudService } from './crud.service';
 
 
 
 @Controller('crud')
 export class CrudController {
-  listaCliente: Cliente[] = []
-  idGen: number = 0;
+
+  constructor(private crudService: CrudService) {}
 
   @Post('add')
   createCliente(@Body() createClienteDto: CreateClienteDto): Cliente | string {
-    if (!createClienteDto.cel || !createClienteDto.email || !createClienteDto.nome ){
-      return 'Cliente incompleto, nada foi adicionado'
-    }
-
-    this.idGen = this.idGen + 1
-
-    let clienteToBeAdded: Cliente = {...createClienteDto, id: this.idGen} 
-    this.listaCliente.push(clienteToBeAdded)
-
-    return clienteToBeAdded;
+    return this.crudService.insertCliente(createClienteDto);
   }
 
   @Get()
   getCliente(): Cliente[] {
-    return this.listaCliente;
+    return this.crudService.listaCliente;
   }
 
   @Put(':id')
   updateCliente(@Param() param, @Body() updateClienteDto: UpdateClienteDto): Cliente {
-    let updatedCliente: Cliente = this.listaCliente.find((x) => x.id == parseInt(param.id))
-    let pos = this.listaCliente.findIndex((x) => x == updatedCliente)
-
-    this.listaCliente[pos] = {...updatedCliente,...updateClienteDto}
-    return this.listaCliente[pos]
+    return this.crudService.updateCliente(parseInt(param.id), updateClienteDto)
   }
 
   @Delete(':id')
   deleteAll(@Param() param): Cliente {    
-    let deletedCliente: Cliente = this.listaCliente.find((x) => x.id == parseInt(param.id))
-    this.listaCliente = this.listaCliente.filter((x) => x.id != parseInt(param.id))
-
-    return deletedCliente
+    return this.crudService.deleteCliente(parseInt(param.id))
   }
 
   @Get('parimpar/:id')
