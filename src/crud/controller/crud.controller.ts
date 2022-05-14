@@ -1,7 +1,7 @@
 
 import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
-import { Cliente, CreateClienteDto, UpdateClienteDto } from './create-cliente.dto';
-import { CrudService } from './crud.service';
+import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
+import { CrudService } from '../service/crud.service';
 
 
 

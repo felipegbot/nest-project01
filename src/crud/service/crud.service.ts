@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cliente, CreateClienteDto, UpdateClienteDto } from './create-cliente.dto';
+import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
 
 @Injectable()
 export class CrudService {
