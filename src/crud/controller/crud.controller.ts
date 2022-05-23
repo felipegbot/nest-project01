@@ -1,7 +1,7 @@
 
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes} from '@nestjs/common';
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
-import { JoiValidationPipe } from '../extra/crud.pipe';
+import { ValidationPipe } from '../extra/crud.pipe';
 import { CrudService } from '../service/crud.service';
 
 
@@ -13,8 +13,7 @@ export class CrudController {
 
 
   @Post('add')
-  @UsePipes(new JoiValidationPipe(new CreateClienteDto()))
-  createCliente(@Body() createClienteDto: CreateClienteDto): Cliente | string {
+  createCliente(@Body(new ValidationPipe()) createClienteDto: CreateClienteDto): Cliente | string {
     return this.crudService.insertCliente(createClienteDto);
   }
 

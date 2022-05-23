@@ -1,9 +1,12 @@
-import { ObjectSchema } from "joi";
-export class CreateClienteDto implements Partial<ObjectSchema>{
+import { IsString, IsInt } from 'class-validator'
+
+export class CreateClienteDto {
+    @IsString()
     nome: string;
+    @IsString()
     email: string;
+    @IsInt()
     cel: number;
-    and: any
 }
 
 export class Cliente extends CreateClienteDto {
