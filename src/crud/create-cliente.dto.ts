@@ -1,10 +1,9 @@
 import { ObjectSchema } from "joi";
-
-export class CreateClienteDto implements Partial<ObjectSchema> {
+export class CreateClienteDto implements Partial<ObjectSchema>{
     nome: string;
     email: string;
     cel: number;
-    ref: any
+    and: any
 }
 
 export class Cliente extends CreateClienteDto {

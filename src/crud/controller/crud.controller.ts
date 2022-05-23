@@ -3,7 +3,6 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
 import { JoiValidationPipe } from '../extra/crud.pipe';
 import { CrudService } from '../service/crud.service';
-import { ObjectSchema } from "joi";
 
 
 
