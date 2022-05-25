@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
 
 @Injectable()
@@ -7,7 +7,11 @@ export class CrudService {
     idGen: number = 0;
 
     getOneCliente(id: number): Cliente {
-        return this.listaCliente.find((cliente) => cliente.id == id)
+        const cliente: Cliente = this.listaCliente.find((cliente) => cliente.id == id) 
+        if(!cliente){
+            throw new BadRequestException('Id não encontrado');
+        }
+        return cliente
     }
 
     insertCliente(cliente: CreateClienteDto): Cliente {

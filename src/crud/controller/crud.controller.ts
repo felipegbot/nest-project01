@@ -1,7 +1,7 @@
 
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes} from '@nestjs/common';
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
-import { GetOneClientePipe } from '../extra/crud.pipe';
+import { ConvertStringToNumber } from '../extra/crud.pipe';
 import { CrudService } from '../service/crud.service';
 
 @Controller('crud')
@@ -10,9 +10,8 @@ export class CrudController {
   constructor(private crudService: CrudService) {}
 
   @Get(':id')
-    // @ts-ignore: Object is possibly 'null'
-  getOneCliente(@Param('id', new GetOneClientePipe(this.crudService)) findedCliente: Cliente){
-    return findedCliente
+  getOneCliente(@Param('id', new ConvertStringToNumber()) id: number){
+    return this.crudService.getOneCliente(id)
   }
 
   @Post('add')

@@ -3,8 +3,7 @@ import { Cliente } from "../create-cliente.dto";
 import { CrudService } from "../service/crud.service";
 
 @Injectable()
-export class GetOneClientePipe implements PipeTransform<string, Cliente> {
-    constructor(private crudService: CrudService){}
+export class ConvertStringToNumber implements PipeTransform<string, number> {
 
     transform(value: any, meta: ArgumentMetadata) {
         const id = parseInt(value, 10)
@@ -13,6 +12,6 @@ export class GetOneClientePipe implements PipeTransform<string, Cliente> {
           throw new BadRequestException('Id inválido');
         }
 
-        return this.crudService.getOneCliente(id)
+        return id
     }
 }
