@@ -1,6 +1,4 @@
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from "@nestjs/common";
-import { Cliente } from "../create-cliente.dto";
-import { CrudService } from "../service/crud.service";
 
 @Injectable()
 export class ConvertStringToNumber implements PipeTransform<string, number> {
