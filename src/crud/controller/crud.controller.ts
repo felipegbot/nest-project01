@@ -1,19 +1,22 @@
 
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes} from '@nestjs/common';
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
-import { ValidationPipe } from '../extra/crud.pipe';
+import { GetOneClientePipe } from '../extra/crud.pipe';
 import { CrudService } from '../service/crud.service';
-
-
 
 @Controller('crud')
 export class CrudController {
 
-  constructor(private crudService: CrudService, ) {}
+  constructor(private crudService: CrudService) {}
 
+  @Get(':id')
+    // @ts-ignore: Object is possibly 'null'
+  getOneCliente(@Param('id', new GetOneClientePipe(this.crudService)) findedCliente: Cliente){
+    return findedCliente
+  }
 
   @Post('add')
-  createCliente(@Body(new ValidationPipe()) createClienteDto: CreateClienteDto): Cliente | string {
+  createCliente(@Body() createClienteDto: CreateClienteDto): Cliente {
     return this.crudService.insertCliente(createClienteDto);
   }
 

@@ -6,15 +6,17 @@ export class CrudService {
     readonly listaCliente: Cliente[] = []
     idGen: number = 0;
 
-    insertCliente(cliente: CreateClienteDto): Cliente | string {
-        if (!cliente.cel || !cliente.email || !cliente.nome ){
-            return 'Cliente incompleto, nada foi adicionado'
-          }
-      
+    getOneCliente(id: number): Cliente {
+        return this.listaCliente.find((cliente) => cliente.id == id)
+    }
+
+    insertCliente(cliente: CreateClienteDto): Cliente {
           this.idGen = this.idGen + 1
       
           let clienteToBeAdded: Cliente = {...cliente, id: this.idGen} 
           this.listaCliente.push(clienteToBeAdded)
+
+          return clienteToBeAdded
     }
 
     updateCliente(id: number, updateClienteDto: UpdateClienteDto): Cliente {

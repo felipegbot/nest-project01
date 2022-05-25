@@ -1,27 +1,18 @@
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from "@nestjs/common";
-import { plainToClass } from "class-transformer";
-import { validate } from "class-validator";
+import { Cliente } from "../create-cliente.dto";
+import { CrudService } from "../service/crud.service";
 
 @Injectable()
-export class ValidationPipe implements PipeTransform<any> {
-    
-    async transform(value: any, {metatype}: ArgumentMetadata) {
-      
-        if(!metatype || this.toValidate(metatype)){
-            return value;
-        }
-        const object = plainToClass(metatype, value)
-        const errors = await validate(object)
+export class GetOneClientePipe implements PipeTransform<string, Cliente> {
+    constructor(private crudService: CrudService){}
 
-        if(errors.length > 0){
-            throw new BadRequestException('Validação do objeto falhou')
+    transform(value: any, meta: ArgumentMetadata) {
+        const id = parseInt(value, 10)
+
+        if (isNaN(id)) {
+          throw new BadRequestException('Id inválido');
         }
 
-        return value
-    }
-
-    private toValidate(metatype: Function): boolean {
-        const types: Function[] = [String, Boolean, Number, Array, Object]
-        return types.includes(metatype)
+        return this.crudService.getOneCliente(id)
     }
 }
