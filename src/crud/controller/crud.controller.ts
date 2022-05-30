@@ -1,12 +1,14 @@
 
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UseInterceptors, UsePipes} from '@nestjs/common';
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
 import { CrudGuard } from '../extra/crud.guard';
+import { CrudInterceptor } from '../extra/crud.interceptor';
 import { GetOneClientePipe } from '../extra/crud.pipe';
 import { roles } from '../extra/roles.decorator';
 import { CrudService } from '../service/crud.service';
 
 @Controller('crud')
+@UseInterceptors(CrudInterceptor)
 @UseGuards(CrudGuard)
 export class CrudController {
 
