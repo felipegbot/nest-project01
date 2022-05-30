@@ -1,14 +1,13 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { Observable, tap } from "rxjs";
+import { map, Observable, tap } from "rxjs";
+
+export interface Response<T> {
+    data: T
+}
 
 @Injectable()
-export class CrudInterceptor implements NestInterceptor {
-    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-        console.log('Before...')
-        const now = Date.now()
-
-        return next.handle().pipe(
-            tap(() => console.log(`After... ${Date.now() - now}ms`))
-        )
+export class CrudInterceptor<T> implements NestInterceptor<T, Response<T>> {
+    intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
+        return next.handle().pipe(map(data => ({data})))
     }
 }
