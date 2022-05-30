@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuard
 import { Cliente, CreateClienteDto, UpdateClienteDto } from '../create-cliente.dto';
 import { CrudGuard } from '../extra/crud.guard';
 import { GetOneClientePipe } from '../extra/crud.pipe';
+import { roles } from '../extra/roles.decorator';
 import { CrudService } from '../service/crud.service';
 
 @Controller('crud')
@@ -11,6 +12,7 @@ export class CrudController {
 
   constructor(private crudService: CrudService) {}
 
+  @roles('admin')
   @Get(':id')
   getOneCliente(@Param('id', GetOneClientePipe) cliente: Cliente): Cliente{
     return cliente
