@@ -1,3 +1,10 @@
-import { SetMetadata } from "@nestjs/common";
+import { applyDecorators, SetMetadata, UseGuards } from "@nestjs/common";
+import { CrudGuard } from "./crud.guard";
 
-export const roles = (...roles: string[]) => SetMetadata('roles', roles)
+
+export function Auth(...roles: string[]) {
+    return applyDecorators(
+    UseGuards(CrudGuard),
+    SetMetadata('roles', roles),
+    )
+}
